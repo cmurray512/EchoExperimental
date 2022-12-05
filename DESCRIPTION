@@ -11,3 +11,4 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/cmurray512/EchoExperimental
 BugReports: https://github.com/cmurray512/EchoExperimental/issues
+RoxygenNote: 7.2.2
