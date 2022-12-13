@@ -79,7 +79,7 @@ hmis.import_extract <- function(extractPath, extractDate, ..., include_disabilit
                                                  TRUE ~ 0))
     chronic <- entry %>%
         dplyr::mutate(EstimatedChronicity = hmis.estimate_chronicity_list(entry, extractDate)) %>%
-        dplyr::select(c('EnrollmentID', 'PersonalID', 'MaybeChronic'))
+        dplyr::select(c('EnrollmentID', 'PersonalID', 'EstimatedChronicity'))
 
     entry <- entry %>%
         dplyr::left_join(chronic, by = c('EnrollmentID', 'PersonalID'))
