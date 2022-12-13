@@ -14,6 +14,8 @@ hmis.import_extract(
 \arguments{
 \item{extractPath}{the path to the folder containing the HMIS CSV/XML Export .csv files.}
 
+\item{extractDate}{the date of the HMIS CSV/XML Export.}
+
 \item{include_disabilities}{OPTIONAL: specifies whether to import the disabilities file (defaults to FALSE).}
 }
 \value{

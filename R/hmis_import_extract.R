@@ -3,7 +3,7 @@
 #' Reads in .csv files from data exported from HMIS per the specified date and returns a list of tibbles.
 #'
 #' @param extractPath the path to the folder containing the HMIS CSV/XML Export .csv files.
-#' @param extractPath the path to the folder containing the HMIS CSV/XML Export .csv files.
+#' @param extractDate the date of the HMIS CSV/XML Export.
 #' @param include_disabilities OPTIONAL: specifies whether to import the disabilities file (defaults to FALSE).
 #'
 #' @return a list of 8-9 tibbles: client, services, entry, exit, project, healthanddv, incomebenefits, & organization (and disabilities if include_disabilities = TRUE).
@@ -76,8 +76,13 @@ hmis.import_extract <- function(extractPath, extractDate, ..., include_disabilit
                                                      PreviousStreetESSH == 1 &
                                                      TimesHomelessPastThreeYears == 4 &
                                                      MonthsHomelessPastThreeYears %in% c(112, 113) ~ 1,
-                                                 TRUE ~ 0)) %>%
-        dplyr::mutate(EstimatedChronicity = hmis.estimate_chronicity_list(entry, extractDate))
+                                                 TRUE ~ 0))
+    chronic <- entry %>%
+        dplyr::mutate(EstimatedChronicity = hmis.estimate_chronicity_list(entry, extractDate)) %>%
+        dplyr::select(c('EnrollmentID', 'PersonalID', 'MaybeChronic'))
+
+    entry <- entry %>%
+        dplyr::left_join(chronic, by = c('EnrollmentID', 'PersonalID'))
 
     exit <- readr::read_csv(stringr::str_c(extractPath, "Exit.csv")) %>%
         dplyr::select(EnrollmentID, PersonalID, ExitDate, Destination)
